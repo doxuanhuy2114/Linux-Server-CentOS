@@ -1,0 +1,66 @@
+========================================
+  DỰ ÁN 2: LINUX SERVER – CENTOS STREAM 9
+  Thực hiện: admin | IP: 192.168.146.130
+========================================
+
+----- 1. CẬP NHẬT HỆ THỐNG -----
+sudo dnf update -y
+
+----- 2. CẤU HÌNH SSH -----
+# Kiểm tra SSH đã có chưa
+sudo systemctl status sshd
+
+# Cài SSH nếu chưa có
+sudo dnf install openssh-server -y
+
+# Khởi động và bật tự động khi boot
+sudo systemctl start sshd
+sudo systemctl enable sshd
+
+# Kiểm tra SSH đang chạy
+sudo systemctl status sshd
+
+# Xem IP máy ảo
+ip addr show
+
+# SSH từ máy thật Windows vào máy ảo
+ssh admin@192.168.146.130
+
+----- 3. CÀI APACHE WEB SERVER -----
+# Cài Apache
+sudo dnf install httpd -y
+
+# Khởi động và bật tự động khi boot
+sudo systemctl start httpd
+sudo systemctl enable httpd
+
+# Kiểm tra Apache đang chạy
+sudo systemctl status httpd
+
+----- 4. CẤU HÌNH FIREWALL -----
+# Kiểm tra trạng thái firewall
+sudo firewall-cmd --state
+
+# Xem các service đang được cho phép
+sudo firewall-cmd --list-all
+
+# Mở port HTTP (80)
+sudo firewall-cmd --permanent --add-service=http
+
+# Mở port HTTPS (443)
+sudo firewall-cmd --permanent --add-service=https
+
+# Reload firewall để áp dụng
+sudo firewall-cmd --reload
+
+# Kiểm tra lại
+sudo firewall-cmd --list-all
+# Kết quả: services: cockpit dhcpv6-client http https ssh
+
+----- 5. TẠO TRANG WEB -----
+# Tạo file HTML
+sudo nano /var/www/html/index.html
+# Nhấn Ctrl+X → Y → Enter để lưu
+
+# Truy cập trang web từ máy thật
+# http://192.168.146.130
